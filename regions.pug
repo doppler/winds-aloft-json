@@ -8,8 +8,11 @@ body
   p
     | Select a region below for the winds aloft forecasts for that region
     | in JSON format.
-    
+
   ul
     each val, index in regions
         a(href='/'+index)
           li= val
+
+  p
+    a(href="https://github.com/doppler/winds-aloft-json" target="_blank") Source on Github
