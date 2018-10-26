@@ -12,18 +12,16 @@ module.exports = (req, res) => {
   const region = req.params.region;
   const station = req.params.station;
 
-  memoryCache
+  return memoryCache
     .wrap(region, () => {
       return fetch(
         `https://aviationweather.gov/windtemp/data?level=low&fcst=06&region=${region}&layout=off&date=`
       ).then(response => response.text());
     })
     .then(html => parse(html, station))
-    .then(data => display(req, res, data));
-};
-
-const display = (req, res, data) => {
-  res.send(JSON.stringify(data, null, 2));
+    .then(data => {
+      return data;
+    });
 };
 
 const parse = (html, station) => {
