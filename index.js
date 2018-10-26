@@ -17,4 +17,8 @@ app.get("/:region", (req, res) => {
   windsAloftJSON(req, res);
 });
 
+app.get("/:region/:station", (req, res) => {
+  windsAloftJSON(req, res);
+});
+
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));

@@ -3,20 +3,23 @@ const $ = require("cheerio");
 
 module.exports = (req, res) => {
   const region = req.params.region;
-  let output;
+  const station = req.params.station;
   fetch(
     `https://aviationweather.gov/windtemp/data?level=low&fcst=06&region=${region}&layout=off&date=`
   )
     .then(response => response.text())
-    .then(html => parse(html))
+    .then(html => parse(html, station))
     .then(data => res.send(JSON.stringify(data, null, 2)));
 };
 
-const parse = html => {
+const parse = (html, station) => {
   let data = parseText(extractText(html));
   data.dataRows.pop(); // junk row
   data.dataRows = mapByCity(data.dataRows);
   data.dataRows = addReadableForecasts(data.dataRows);
+  if (station) {
+    data.dataRows = data.dataRows.filter(row => row.city === station);
+  }
   return data;
 };
 
