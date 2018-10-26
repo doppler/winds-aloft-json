@@ -18,7 +18,7 @@ app.get("/:region", (req, res) => {
   fetchAndSendResult(req, res);
 });
 
-app.listen(PORT, () => console.log(`Example app listening on port ${port}!`));
+app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
 
 const fetchAndSendResult = (req, res) => {
   const region = req.params.region || "mia";
