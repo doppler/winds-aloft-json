@@ -1,0 +1,15 @@
+doctype html
+
+head
+  link(rel="stylesheet" href="/style.css")
+body
+  h1 Winds Aloft JSON
+
+  p
+    | Select a region below for the winds aloft forecasts for that region
+    | in JSON format.
+    
+  ul
+    each val, index in regions
+        a(href='/'+index)
+          li= val
