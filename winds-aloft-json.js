@@ -19,7 +19,11 @@ module.exports = (req, res) => {
       ).then(response => response.text());
     })
     .then(html => parse(html, station))
-    .then(data => res.send(JSON.stringify(data, null, 2)));
+    .then(data => display(req, res, data));
+};
+
+const display = (req, res, data) => {
+  res.send(JSON.stringify(data, null, 2));
 };
 
 const parse = (html, station) => {
