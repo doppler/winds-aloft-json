@@ -1,13 +1,23 @@
 const fetch = require("node-fetch");
 const $ = require("cheerio");
 
+const cacheManager = require("cache-manager");
+const memoryCache = cacheManager.caching({
+  store: "memory",
+  max: 100,
+  ttl: 60 * 60 /* 1 hour */
+});
+
 module.exports = (req, res) => {
   const region = req.params.region;
   const station = req.params.station;
-  fetch(
-    `https://aviationweather.gov/windtemp/data?level=low&fcst=06&region=${region}&layout=off&date=`
-  )
-    .then(response => response.text())
+
+  memoryCache
+    .wrap(region, () => {
+      return fetch(
+        `https://aviationweather.gov/windtemp/data?level=low&fcst=06&region=${region}&layout=off&date=`
+      ).then(response => response.text());
+    })
     .then(html => parse(html, station))
     .then(data => res.send(JSON.stringify(data, null, 2)));
 };
