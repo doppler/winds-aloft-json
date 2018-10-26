@@ -1,0 +1,11 @@
+{
+  "bos": "Northeast - Boston",
+  "mia": "Southeast - Miami",
+  "chi": "Northcentral - Chicago",
+  "dfw": "Southcentral - Dallas Fort Worth",
+  "slc": "Rocky Mountains - Salt Lake City",
+  "sfo": "Pacific Coast - San Francisco",
+  "alaska": "Alaska",
+  "hawaii": "Hawaii",
+  "other_pac": "Western Pacific"
+}

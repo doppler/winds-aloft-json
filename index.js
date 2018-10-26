@@ -1,19 +1,41 @@
 const fetch = require("node-fetch");
 const $ = require("cheerio");
+const express = require("express");
+const pug = require("pug");
+const regions = require("./regions.json");
+const regionsFunction = pug.compileFile("./regions.pug");
 
-fetch(
-  "https://aviationweather.gov/windtemp/data?level=low&fcst=06&region=mia&layout=off&date="
-)
-  .then(response => response.text())
-  .then(html => parse(html));
+const app = express();
+const port = 3000;
+
+app.use(express.static("assets"));
+
+app.get("/", (req, res) => {
+  res.send(regionsFunction({ regions }));
+});
+
+app.get("/:region", (req, res) => {
+  fetchAndSendResult(req, res);
+});
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+const fetchAndSendResult = (req, res) => {
+  const region = req.params.region || "mia";
+  fetch(
+    `https://aviationweather.gov/windtemp/data?level=low&fcst=06&region=${region}&layout=off&date=`
+  )
+    .then(response => response.text())
+    .then(html => parse(html))
+    .then(data => res.send(JSON.stringify(data, null, 2)));
+};
 
 const parse = html => {
-  let parsedText = parseText(extractText(html));
-  parsedText.dataRows.pop(); // junk row
-  parsedText.dataRows = mapByCity(parsedText.dataRows);
-  parsedText.dataRows = addReadableForecasts(parsedText.dataRows);
-  // console.log(JSON.stringify(parsedText.dataRows, null, 2));
-  console.log(parsedText);
+  let data = parseText(extractText(html));
+  data.dataRows.pop(); // junk row
+  data.dataRows = mapByCity(data.dataRows);
+  data.dataRows = addReadableForecasts(data.dataRows);
+  return data;
 };
 
 const extractText = html => {
