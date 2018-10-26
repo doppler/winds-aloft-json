@@ -17,9 +17,7 @@ app.get("/", (req, res) => {
 
 app.get("/:region/:station?", (req, res) => {
   windsAloftJSON(req).then(data => {
-    // res.send(JSON.stringify(data, undefined, 2));
-    const jsonHTML = jsonMarkup(data);
-    res.send(jsonPage({ jsonHTML }));
+    res.send(jsonPage({ jsonHTML: jsonMarkup(data) }));
   });
 });
 
