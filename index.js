@@ -13,11 +13,7 @@ app.get("/", (req, res) => {
   res.send(regionsFunction({ regions }));
 });
 
-app.get("/:region", (req, res) => {
-  windsAloftJSON(req, res);
-});
-
-app.get("/:region/:station", (req, res) => {
+app.get("/:region/:station?", (req, res) => {
   windsAloftJSON(req, res);
 });
 
