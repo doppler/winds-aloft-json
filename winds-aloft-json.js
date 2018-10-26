@@ -15,10 +15,10 @@ module.exports = (req, res) => {
 const parse = (html, station) => {
   let data = parseText(extractText(html));
   data.dataRows.pop(); // junk row
-  data.dataRows = mapByCity(data.dataRows);
+  data.dataRows = mapByStation(data.dataRows);
   data.dataRows = addReadableForecasts(data.dataRows);
   if (station) {
-    data.dataRows = data.dataRows.filter(row => row.city === station);
+    data.dataRows = data.dataRows.filter(row => row.station === station);
   }
   return data;
 };
@@ -42,10 +42,10 @@ const parseText = text => {
   };
 };
 
-const mapByCity = dataRows => {
+const mapByStation = dataRows => {
   return dataRows.map(row => {
-    [city, ...rest] = [...row.split(/\s/)];
-    return { city, rawForecast: rest.slice(0, 4) };
+    [station, ...rest] = [...row.split(/\s/)];
+    return { station, rawForecast: rest.slice(0, 4) };
   });
 };
 
