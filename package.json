@@ -1,15 +1,20 @@
 {
-  "name": "winds-oloft",
+  "name": "winds-oloft-json",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "David Rose",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/doppler/winds-aloft-json"
+  },
   "license": "ISC",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.4",
     "node-fetch": "^2.2.0"
   }
 }
