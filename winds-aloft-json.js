@@ -20,7 +20,7 @@ module.exports = (req, res) => {
     })
     .then(html => parse(html, station))
     .then(data => {
-      return data;
+      return { region, station, ...data };
     });
 };
 

@@ -15,9 +15,12 @@ app.get("/", (req, res) => {
   res.send(regionsPage({ regions }));
 });
 
-app.get("/:region/:station?", (req, res) => {
+app.get("/:region.:ext?/:station?.:ext?", (req, res) => {
+  console.log(req.params);
   windsAloftJSON(req).then(data => {
-    res.send(jsonPage({ jsonHTML: jsonMarkup(data) }));
+    req.params.ext === "json"
+      ? res.json(data)
+      : res.send(jsonPage({ jsonHTML: jsonMarkup(data), data: data }));
   });
 });
 

@@ -4,4 +4,10 @@ head
   link(rel="stylesheet" href="/style.css")
 
 body
+  div
+    if data.station
+      a(href=data.station + ".json") #{data.station}.json
+    else
+      a(href=data.region + ".json") #{data.region}.json
+
   div !{jsonHTML}
