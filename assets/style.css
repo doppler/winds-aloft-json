@@ -22,3 +22,16 @@ a {
 ul > a {
   text-decoration: none;
 }
+.json-markup {
+  font-family: monospace;
+  white-space: pre;
+}
+.json-markup-key {
+  font-weight: bold;
+}
+.json-markup-string {
+  color: lightgreen;
+}
+.json-markup-number {
+  color: yellow;
+}
