@@ -1,4 +1,5 @@
 const express = require("express");
+const allowCrossDomain = require("./allow-cross-domain");
 const jsonMarkup = require("json-markup");
 const pug = require("pug");
 const regionsWithStations = require("./regions-with-stations.json");
@@ -9,6 +10,7 @@ const getWindsAloft = require("./get-winds-aloft");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+app.use(allowCrossDomain);
 app.use(express.static("assets"));
 
 app.get("/", (req, res) => {
