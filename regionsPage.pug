@@ -13,11 +13,11 @@ body
       div.region
         div.header
           h1
-            a(href='/'+obj.region.id)= obj.region.name
+            a(href='/forecast/'+obj.region.id)= obj.region.name
         div.stations
           ul
             each station in obj.stations
-              a(href='/'+obj.region.id+'/'+station)
+              a(href='/forecast/'+obj.region.id+'/'+station)
                 li= station
 
   p

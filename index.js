@@ -13,16 +13,16 @@ const PORT = process.env.PORT || 5000;
 app.use(allowCrossDomain);
 app.use(express.static("assets"));
 
-app.get("/", (req, res) => {
-  res.send(regionsPage({ regionsWithStations }));
-});
-
-app.get("/:region.:ext?/:station?.:ext?", (req, res) => {
+app.get("/forecast/:region.:ext?/:station?.:ext?", (req, res, next) => {
   getWindsAloft(req).then(data => {
     req.params.ext === "json"
       ? res.json(data)
       : res.send(jsonPage({ jsonHTML: jsonMarkup(data), data: data }));
   });
+});
+
+app.get("/", (req, res, next) => {
+  res.send(regionsPage({ regionsWithStations }));
 });
 
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
