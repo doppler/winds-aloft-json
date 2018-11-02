@@ -88,13 +88,18 @@ const parseForecast = rawForecast => {
           altitude = 12000;
           break;
       }
-      return {
+      const result = {
         altitudeForecast,
         altitude: altitude,
         direction: getDirection(altitudeForecast),
         speed: getSpeed(altitudeForecast),
         temperature: getTemperature(altitudeForecast)
       };
+      if (altitude === 3000) {
+        // temperature is not reported at 3k, just so ya know
+        delete result.temperature;
+      }
+      return result;
     })
     .reverse();
 };
