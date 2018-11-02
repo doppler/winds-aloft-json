@@ -1,5 +1,6 @@
 const fetch = require("node-fetch");
 const $ = require("cheerio");
+const moment = require("moment");
 
 const cacheManager = require("cache-manager");
 const memoryCache = cacheManager.caching({
@@ -44,14 +45,27 @@ const parseText = text => {
   [extFromLine, notSure, dataBasedOnLine, validFromLine, _, keys, ...rest] = [
     ...rows
   ];
-  return {
-    extFromLine,
-    notSure,
-    dataBasedOnLine,
-    validFromLine,
-    keys,
+  const dataBasedOn = moment(
+    dataBasedOnLine.match(/(\w+)Z/),
+    "DDHHmm"
+  ).format();
+  const valid = moment(
+    validFromLine.match(/VALID (\w+)/)[1],
+    "DDHHmm"
+  ).format();
+  const forUseParts = validFromLine.match(/FOR USE (\w+)-(\w+)Z/);
+  const from = moment(forUseParts[1], "HHmm").format();
+  const to = moment(forUseParts[2], "HHmm").format();
+  const result = {
+    // dataBasedOnLine,
+    dataBasedOn,
+    // validFromLine,
+    valid,
+    forUse: { from, to },
+    // keys,
     dataRows: rest
   };
+  return result;
 };
 
 const mapByStation = dataRows => {
