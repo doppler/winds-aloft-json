@@ -6,7 +6,7 @@ const cacheManager = require("cache-manager");
 const memoryCache = cacheManager.caching({
   store: "memory",
   max: 100,
-  ttl: 60 * 60 /* 1 hour */
+  ttl: 60 * 5 /* 5 minutes */
 });
 
 module.exports = (req, res) => {
@@ -47,19 +47,19 @@ const parseText = text => {
   ];
   const dataBasedOn = moment(
     dataBasedOnLine.match(/(\w+)Z/),
-    "DDHHmm"
+    "HHmmss"
   ).format();
   const valid = moment(
     validFromLine.match(/VALID (\w+)/)[1],
-    "DDHHmm"
+    "HHmmss"
   ).format();
   const forUseParts = validFromLine.match(/FOR USE (\w+)-(\w+)Z/);
   const from = moment(forUseParts[1], "HHmm").format();
   const to = moment(forUseParts[2], "HHmm").format();
   const result = {
-    // dataBasedOnLine,
+    dataBasedOnLine,
     dataBasedOn,
-    // validFromLine,
+    validFromLine,
     valid,
     forUse: { from, to },
     // keys,
