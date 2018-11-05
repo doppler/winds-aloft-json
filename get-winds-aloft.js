@@ -47,21 +47,24 @@ const parseText = text => {
   ];
   const dataBasedOn = moment(
     dataBasedOnLine.match(/(\w+)Z/),
-    "HHmmss"
+    "DDHHmm"
   ).format();
   const valid = moment(
-    validFromLine.match(/VALID (\w+)/)[1],
-    "HHmmss"
+    validFromLine.match(/VALID (\w+)Z/)[1] + "+0000",
+    "DDHHmmZ"
   ).format();
   const forUseParts = validFromLine.match(/FOR USE (\w+)-(\w+)Z/);
-  const from = moment(forUseParts[1], "HHmm").format();
-  const to = moment(forUseParts[2], "HHmm").format();
+  const from = moment(forUseParts[1] + "+0000", "HHmmZ");
+  // const to = moment(forUseParts[2] + "0000", "HHmmZ");
+  // if (from.isAfter(to)) {
+  //   to.add(1, "day");
+  // }
   const result = {
     dataBasedOnLine,
     dataBasedOn,
     validFromLine,
     valid,
-    forUse: { from, to },
+    forUse: { from: from.format(), to: from.add(6, "hours").format() },
     // keys,
     dataRows: rest
   };
