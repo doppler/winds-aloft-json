@@ -69,3 +69,16 @@ ul > a {
 .json-markup-number {
   color: yellow;
 }
+
+code {
+  white-space: pre;
+}
+.container {
+  display: grid;
+  width: 410px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+.container > .cell {
+  text-align: center;
+  height: 120px;
+}

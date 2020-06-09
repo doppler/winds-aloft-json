@@ -1,12 +1,12 @@
-const fetch = require("node-fetch");
-const $ = require("cheerio");
-const moment = require("moment");
+const fetch = require('node-fetch');
+const $ = require('cheerio');
+const moment = require('moment');
 
-const cacheManager = require("cache-manager");
+const cacheManager = require('cache-manager');
 const memoryCache = cacheManager.caching({
-  store: "memory",
+  store: 'memory',
   max: 100,
-  ttl: 60 * 5 /* 5 minutes */
+  ttl: 60 * 5 /* 5 minutes */,
 });
 
 module.exports = (req, res) => {
@@ -17,10 +17,10 @@ module.exports = (req, res) => {
     .wrap(region, () => {
       return fetch(
         `https://aviationweather.gov/windtemp/data?level=low&fcst=06&region=${region}&layout=off&date=`
-      ).then(response => response.text());
+      ).then((response) => response.text());
     })
-    .then(html => parse(html, station))
-    .then(data => {
+    .then((html) => parse(html, station))
+    .then((data) => {
       return { region, station, ...data };
     });
 };
@@ -31,30 +31,30 @@ const parse = (html, station) => {
   data.dataRows = mapByStation(data.dataRows);
   data.dataRows = addReadableForecasts(data.dataRows);
   if (station) {
-    data.dataRows = data.dataRows.filter(row => row.station === station);
+    data.dataRows = data.dataRows.filter((row) => row.station === station);
   }
   return data;
 };
 
-const extractText = html => {
-  return $("pre", html).text();
+const extractText = (html) => {
+  return $('pre', html).text();
 };
 
-const parseText = text => {
+const parseText = (text) => {
   const rows = text.split(/\n/);
   [extFromLine, notSure, dataBasedOnLine, validFromLine, _, keys, ...rest] = [
-    ...rows
+    ...rows,
   ];
   const dataBasedOn = moment(
     dataBasedOnLine.match(/(\w+)Z/),
-    "DDHHmm"
+    'DDHHmm'
   ).format();
   const valid = moment(
-    validFromLine.match(/VALID (\w+)Z/)[1] + "+0000",
-    "DDHHmmZ"
+    validFromLine.match(/VALID (\w+)Z/)[1] + '+0000',
+    'DDHHmmZ'
   ).format();
   const forUseParts = validFromLine.match(/FOR USE (\w+)-(\w+)Z/);
-  const from = moment(forUseParts[1] + "+0000", "HHmmZ");
+  const from = moment(forUseParts[1] + '+0000', 'HHmmZ');
   // const to = moment(forUseParts[2] + "0000", "HHmmZ");
   // if (from.isAfter(to)) {
   //   to.add(1, "day");
@@ -64,30 +64,30 @@ const parseText = text => {
     dataBasedOn,
     validFromLine,
     valid,
-    forUse: { from: from.format(), to: from.add(6, "hours").format() },
+    forUse: { from: from.format(), to: from.add(6, 'hours').format() },
     // keys,
-    dataRows: rest
+    dataRows: rest,
   };
   return result;
 };
 
-const mapByStation = dataRows => {
-  return dataRows.map(row => {
+const mapByStation = (dataRows) => {
+  return dataRows.map((row) => {
     [station, ...rest] = [...row.split(/\s/)];
     return { station, rawForecast: rest.slice(0, 4) };
   });
 };
 
-const addReadableForecasts = dataRows => {
-  return dataRows.map(row => {
+const addReadableForecasts = (dataRows) => {
+  return dataRows.map((row) => {
     return {
       ...row,
-      forecast: parseForecast(row.rawForecast)
+      forecast: parseForecast(row.rawForecast),
     };
   });
 };
 
-const parseForecast = rawForecast => {
+const parseForecast = (rawForecast) => {
   return rawForecast
     .map((altitudeForecast, i) => {
       let altitude;
@@ -110,7 +110,7 @@ const parseForecast = rawForecast => {
         altitude: altitude,
         direction: getDirection(altitudeForecast),
         speed: getSpeed(altitudeForecast),
-        temperature: getTemperature(altitudeForecast)
+        temperature: getTemperature(altitudeForecast),
       };
       if (altitude === 3000) {
         // temperature is not reported at 3k, just so ya know
@@ -121,17 +121,17 @@ const parseForecast = rawForecast => {
     .reverse();
 };
 
-const getDirection = altitudeForecast => {
+const getDirection = (altitudeForecast) => {
   let dirVal = Number(altitudeForecast.slice(0, 2)) * 10;
   if (dirVal === 990) {
-    dirVal = "L/V";
+    dirVal = 'L/V';
   } else if (dirVal > 400) {
     dirVal = dirVal - 500;
   }
   return dirVal;
 };
 
-const getSpeed = altitudeForecast => {
+const getSpeed = (altitudeForecast) => {
   const dirVal = Number(altitudeForecast.slice(0, 2)) * 10;
   let knots = Number(altitudeForecast.slice(2, 4));
   if (dirVal > 400) {
@@ -142,14 +142,14 @@ const getSpeed = altitudeForecast => {
   }
   return {
     knots,
-    mph: Math.round(knots * 1.151)
+    mph: Math.round(knots * 1.151),
   };
 };
 
-const getTemperature = altitudeForecast => {
+const getTemperature = (altitudeForecast) => {
   let celsius = Number(altitudeForecast.slice(4, 7));
   return {
     celsius,
-    farenheit: Math.round((celsius * 9) / 5 + 32)
+    farenheit: Math.round((celsius * 9) / 5 + 32),
   };
 };

@@ -1,0 +1,25 @@
+link(rel='stylesheet' href='/style.css')
+div.container
+  div.header Altitude
+  div.header Direction
+  div.header Speed
+  div.header Temp
+
+  each forecast in json.dataRows[0].forecast
+    div.cell.altitude= forecast.altitude
+    div.cell.direction
+      div.text= forecast.direction + '°'
+      div.arrow
+        if forecast.speed.mph === 0
+          span.nothing
+        else
+          img(src="/arrow.svg" style=`transform: rotate(${forecast.direction}deg)`)
+    div.cell.speed
+      div.knots= forecast.speed.knots + ' knots'
+      div.mph= forecast.speed.mph + ' MPH'
+    div.cell.temp
+      div.celsius= forecast.temperature ? forecast.temperature.celsius + '℃' : ''
+      div.farenheit= forecast.temperature ? forecast.temperature.farenheit + '℉' : ''
+
+//- .code
+//-   code= JSON.stringify(json, null, 2)
