@@ -22,6 +22,7 @@ app.get('/forecast/:region.:ext?/:station?.:ext?', (req, res, next) => {
         break;
       case 'html':
         res.send(htmlPage({ json: data }));
+        break;
       default:
         res.send(jsonPage({ jsonHTML: jsonMarkup(data), data: data }));
         break;
