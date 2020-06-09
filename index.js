@@ -27,9 +27,6 @@ app.get('/forecast/:region.:ext?/:station?.:ext?', (req, res, next) => {
         res.send(jsonPage({ jsonHTML: jsonMarkup(data), data: data }));
         break;
     }
-    // req.params.ext === 'json'
-    //   ? res.json(data)
-    //   : res.send(jsonPage({ jsonHTML: jsonMarkup(data), data: data }));
   });
 });
 

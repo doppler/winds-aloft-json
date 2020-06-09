@@ -77,8 +77,19 @@ code {
   display: grid;
   width: 410px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
+  text-align: center;
 }
 .container > .cell {
-  text-align: center;
   height: 120px;
+}
+.container > .reportInfo {
+  text-align: left;
+  grid-column: 1 / span 4;
+}
+.container > .reportingStation {
+  grid-column: 2 / span 3;
+}
+.container > .reportInfo > span.info {
+  font-size: smaller;
+  margin-right: 1em;
 }
