@@ -86,10 +86,10 @@ code {
   text-align: left;
   grid-column: 1 / span 4;
 }
-.container > .reportingStation {
-  grid-column: 2 / span 3;
-}
 .container > .reportInfo > span.info {
   font-size: smaller;
   margin-right: 1em;
+}
+.container > .reportingStation {
+  grid-column: 2 / span 3;
 }
